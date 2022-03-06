@@ -1,0 +1,35 @@
+{
+    "name": "com.prographgroup.condition",
+    "version": "1.0.0",
+    "displayName": "ProGraphGroup Condition",
+    "description": "Utilities",
+    "unity": "2017.1",
+    "license": "Copyright (c) ProGraphGroup.com All rights reserved. ",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "ProGraphGroup",
+      "email": "support@ProGraphGroup.com",
+      "url": "https://ProGraphGroup.com"
+    },
+    "samples": [
+    ],
+    "dependencies": {
+      "com.prographgroup.general-managers" : "0.1.1-pre.2",
+      "third-party.com.cysharp.unitask" : "2.2.5",
+      "third-party.com.sirenix.odin-inspector-and-serializer" : "3.0.8" 
+    },
+    "keywords": [
+      "ProGraphGroup",
+      "ProGraphGroup",
+      "Condition",
+      "Utilities",
+      "Timer",
+      "Trigger",
+      "ITrigger",
+      "CheckValue",
+      "CheckEvent",
+      "Tools"
+    ]
+  }

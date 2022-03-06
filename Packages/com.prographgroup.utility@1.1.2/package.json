@@ -1,0 +1,28 @@
+{
+    "name": "com.prographgroup.utility",
+    "version": "1.1.2",
+    "displayName": "ProGraphGroup Utility",
+    "description": "Utilities",
+    "unity": "2017.1",
+    "license": "Copyright (c) ProGraphGroup.com All rights reserved. ",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "ProGraphGroup",
+      "email": "support@ProGraphGroup.com",
+      "url": "https://ProGraphGroup.com"
+    },
+    "samples": [
+    ],
+    "dependencies": {
+      "com.prographgroup.package-manager-extension": "1.0.0"
+    },
+    "keywords": [
+      "ProGraphGroup",
+      "ProGraphGroup",
+      "Utility",
+      "Utilities",
+      "Tools"
+    ]
+  }

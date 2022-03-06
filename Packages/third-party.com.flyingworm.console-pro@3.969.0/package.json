@@ -1,0 +1,21 @@
+{
+	"name": "third-party.com.flyingworm.console-pro",
+	"displayName": "Console Pro",
+	"description": "Console Pro",
+	"version": "3.969.0",
+	"unity": "2018.3",
+	"author": {
+		"name": "FlyingWorm",
+		"email": "support@flyingworm.com",
+		"url": "http://flyingworm.com/"
+	},
+	"dependencies": {
+	},
+	"keywords": [
+		"debug",
+		"window",
+		"console",
+		"console-pro",
+		"tools"
+	]
+}

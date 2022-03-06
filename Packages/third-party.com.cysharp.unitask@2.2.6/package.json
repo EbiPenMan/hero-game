@@ -1,0 +1,13 @@
+{
+    "name": "third-party.com.cysharp.unitask",
+    "displayName": "UniTask",
+    "version": "2.2.6",
+    "unity": "2018.4",
+    "description": "Provides an efficient async/await integration to Unity. original ver 2.2.5",
+    "keywords": [ "async/await", "async", "Task", "UniTask" ],
+    "license": "MIT",
+    "category": "Task",
+    "dependencies": {
+        "com.prographgroup.package-manager-extension": "1.0.0"
+    }
+}

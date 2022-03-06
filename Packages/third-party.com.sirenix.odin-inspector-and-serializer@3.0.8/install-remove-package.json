@@ -1,0 +1,8 @@
+{
+    "installPackagesPath": [
+        "/Odin - Inspector and Serializer 3.0.5 EXP.unitypackage"
+    ],
+    "removeAssetsPath": [
+        "Assets/Plugins/Sirenix"
+    ]
+}

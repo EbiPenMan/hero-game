@@ -1,0 +1,9 @@
+{
+    "installPackagesPath": [
+        "/DOTween Pro 1.0.310.unitypackage"
+    ],
+    "removeAssetsPath": [
+        "Assets/Plugins/Demigiant",
+        "Assets/Resources/DOTweenSettings.asset"
+    ]
+}

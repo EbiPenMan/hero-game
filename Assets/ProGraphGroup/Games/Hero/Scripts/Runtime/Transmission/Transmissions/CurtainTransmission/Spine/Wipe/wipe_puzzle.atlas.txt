@@ -1,0 +1,8 @@
+wipe_puzzle.png
+size:2278,1708
+filter:Linear,Linear
+pma:true
+Left_Side
+bounds:2,2,1136,1704
+Right_Side
+bounds:1140,2,1136,1704

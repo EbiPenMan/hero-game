@@ -1,0 +1,28 @@
+{
+    "name": "com.prographgroup.package-manager-extension",
+    "version": "1.1.0",
+    "displayName": "Package Manager Extension",
+    "description": "Utilities",
+    "unity": "2017.1",
+    "license": "Copyright (c) ProGraphGroup.com All rights reserved. ",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "ProGraphGroup",
+      "email": "support@ProGraphGroup.com",
+      "url": "https://ProGraphGroup.com"
+    },
+    "samples": [
+    ],
+    "dependencies": {
+      "third-party.com.marijnzwemmer.unity-toolbar-extender": "1.4.1"
+    },
+    "keywords": [
+      "ProGraphGroup",
+      "ProGraphGroup",
+      "Utility",
+      "Utilities",
+      "Tools"
+    ]
+  }

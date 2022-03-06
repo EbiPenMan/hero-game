@@ -1,0 +1,30 @@
+{
+    "name": "com.prographgroup.general-managers",
+    "version": "0.1.4",
+    "displayName": "ProGraphGroup General Managers",
+    "description": "Utilities",
+    "unity": "2017.1",
+    "license": "Copyright (c) ProGraphGroup.com All rights reserved. ",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "ProGraphGroup",
+      "email": "support@ProGraphGroup.com",
+      "url": "https://ProGraphGroup.com"
+    },
+    "samples": [
+    ],
+    "dependencies": {
+      "com.prographgroup.utility" : "1.1.2"
+    },
+    "keywords": [
+      "ProGraphGroup",
+      "ProGraphGroup",
+      "GeneralManagers",
+      "Manager",
+      "Managers",
+      "Utilities",
+      "Tools"
+    ]
+  }

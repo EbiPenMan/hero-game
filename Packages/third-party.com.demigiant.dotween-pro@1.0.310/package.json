@@ -1,0 +1,28 @@
+{
+    "name": "third-party.com.demigiant.dotween-pro",
+    "version": "1.0.310",
+    "displayName": "DOTween Pro",
+    "description": "DOTween Pro extends the free engine DOTween, implementing new features both for scripting and visual scripting, including extra features",
+    "unity": "2018.4",
+    "unityRelease": "36f1",
+    "license": "Copyright (c) Sirenix IVS. All rights reserved.",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "demigiant",
+      "email": "support@demigiant.com",
+      "url": "http://www.demigiant.com/"
+    },
+    "samples": [
+
+    ],
+    "dependencies": {
+      "com.prographgroup.legacy-package-installer": "1.0.0-pre.1"
+    },
+    "keywords": [
+      "DOTween",
+      "Tool",
+      "Utilities"
+    ]
+  }

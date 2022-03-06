@@ -1,0 +1,29 @@
+{
+    "name": "ProGraphGroup.Games.Hero",
+    "rootNamespace": "ProGraphGroup.Games.Hero",
+    "references": [
+        "ProGraphGroup.General",
+        "UniTask",
+        "RTLTMPro",
+        "UniTask.TextMeshPro",
+        "UniRx",
+        "NakamaRuntime",
+        "NakamaEditor",
+        "UniTask.Linq",
+        "Cafebazaar",
+        "ProGraphGroup.Packages.GeneralManagers",
+        "ProGraphGroup.Packages.Utility",
+        "spine-csharp",
+        "spine-unity",
+        "BrunoMikoski.AnimationSequencer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

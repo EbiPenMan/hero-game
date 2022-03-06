@@ -1,0 +1,29 @@
+{
+    "name": "com.prographgroup.legacy-package-installer",
+    "version": "1.0.0-pre.1",
+    "displayName": "Legacy Package Installer",
+    "description": "Auto import legacy unitypackage file and auto delete assets on remove package. ",
+    "unity": "2018.4",
+    "unityRelease": "36f1",
+    "license": "Copyright (c) ProGraphGroup.com All rights reserved. ",
+    "type": "Tools",
+    "category": "Utilities",
+    "hideInEditor": true,
+    "author": {
+      "name": "ProGraphGroup",
+      "email": "support@ProGraphGroup.com",
+      "url": "https://ProGraphGroup.com"
+    },
+    "samples": [
+    ],
+    "dependencies": {
+      "com.unity.nuget.newtonsoft-json" : "2.0.0"
+    },
+    "keywords": [
+      "ProGraphGroup",
+      "ProGraphGroup",
+      "Editor",
+      "Tool",
+      "Utilities"
+    ]
+  }
