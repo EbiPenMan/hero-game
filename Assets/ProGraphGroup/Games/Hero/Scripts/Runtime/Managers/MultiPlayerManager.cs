@@ -21,19 +21,20 @@ namespace ProGraphGroup.Games.Hero
         private IMatchmakerTicket matchmakerTicket;
         private IMatchmakerMatched matchmakerMatched;
         private IMatch match;
-        
-        public async UniTask SendMMRequest()
+
+        public async UniTask InitNewMatchMaking()
         {
             await CreateSocket();
 
+            socket.ReceivedMatchmakerMatched -= OnMatched;
             socket.ReceivedMatchmakerMatched += OnMatched;
+            socket.ReceivedMatchPresence -= OnReceivedMatchPresence;
             socket.ReceivedMatchPresence += OnReceivedMatchPresence;
 
-            socket.ReceivedMatchState  += OnReceivedMatchState;
+            socket.ReceivedMatchState -= OnReceivedMatchState;
+            socket.ReceivedMatchState += OnReceivedMatchState;
 
             await SendMachMakingRequest();
-
-
         }
 
         public async UniTask CreateSocket()
@@ -41,26 +42,58 @@ namespace ProGraphGroup.Games.Hero
             socket = ServerManager.Instance.client.NewSocket();
             bool appearOnline = true;
             int connectionTimeout = 30;
-            await socket.ConnectAsync(ServerManager.Instance.session, appearOnline, connectionTimeout);
+            try
+            {
+                await socket.ConnectAsync(ServerManager.Instance.session, appearOnline, connectionTimeout);
+            }
+            catch (Nakama.ApiResponseException ex)
+            {
+                Logger.Info(String.Format("Error CreateSocket: {0}:{1}", ex.StatusCode, ex.Message));
+            }
         }
 
         public async UniTask SendMachMakingRequest()
         {
             int minPlayers = 2;
             int maxPlayers = 2;
-            string query = "+trophy:>100 mode:arena";
+            long trophy = 100;
+            string query = String.Format("+trophy:>={0} +trophy:<={1} mode:arena", trophy - 20, trophy + 20);
             Dictionary<string, string> stringProperties = new Dictionary<string, string> {{"mode", "arena"}};
-            Dictionary<string, double> numericProperties = new Dictionary<string, double> {{"skill", 100}};
-            matchmakerTicket =
-                await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+            Dictionary<string, double> numericProperties = new Dictionary<string, double> {{"trophy", trophy}};
+            try
+            {
+                matchmakerTicket =
+                    await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+            }
+            catch (Nakama.ApiResponseException ex)
+            {
+                Logger.Info(String.Format("Error SendMachMakingRequest: {0}:{1}", ex.StatusCode, ex.Message));
+            }
         }
+
         public async UniTask SendMachMakingCancelRequest()
         {
-            await socket.RemoveMatchmakerAsync(matchmakerTicket);
+            try
+            {
+                await socket.RemoveMatchmakerAsync(matchmakerTicket);
+            }
+            catch (Nakama.ApiResponseException ex)
+            {
+                Logger.Info(String.Format("Error SendMachMakingCancelRequest: {0}:{1}", ex.StatusCode, ex.Message));
+            }
         }
+
         public async UniTask SendJoinFoundedMatch()
         {
-            match = await socket.JoinMatchAsync(matchmakerMatched);
+            try
+            {
+                match = await socket.JoinMatchAsync(matchmakerMatched);
+            }
+            catch (Nakama.ApiResponseException ex)
+            {
+                Logger.Info(String.Format("Error SendJoinFoundedMatch: {0}:{1}", ex.StatusCode, ex.Message));
+            }
+
             foreach (var presence in match.Presences)
             {
                 Logger.Info(String.Format("User id '{0}' name '{1}'.", presence.UserId, presence.Username));
@@ -76,7 +109,6 @@ namespace ProGraphGroup.Games.Hero
             Logger.Info("Matched opponents: [{0}]", opponents);
 
             await SendJoinFoundedMatch();
-
         }
 
         public async void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
@@ -91,27 +123,48 @@ namespace ProGraphGroup.Games.Hero
 
             // Remove yourself from connected opponents.
             // connectedOpponents.Remove(this);
-            Console.WriteLine("Connected opponents: [{0}]", string.Join(",\n  ", connectedOpponents));
+            Logger.Info("Connected opponents: [{0}]", string.Join(",\n  ", connectedOpponents));
         }
 
-        public async UniTask SendMatchState(int opCode , IMatchState newState)
+        public async UniTask SendMatchState(MatchOpCode opCode, IMatchState newState)
         {
-            socket.SendMatchStateAsync(match.Id, opCode, newState.ToJson());
+            try
+            {
+                await socket.SendMatchStateAsync(match.Id, (long) opCode, newState.ToJson());
+            }
+            catch (Nakama.ApiResponseException ex)
+            {
+                Logger.Info(String.Format("Error SendMatchState: {0}:{1}", ex.StatusCode, ex.Message));
+            }
         }
 
-        public async void OnReceivedMatchState( IMatchState newState )
+        public async void OnReceivedMatchState(IMatchState newState)
         {
             var enc = System.Text.Encoding.UTF8;
             var content = enc.GetString(newState.State);
 
-            switch (newState.OpCode)
+            switch ((MatchOpCode) newState.OpCode)
             {
-                case 101:
-                    Console.WriteLine("A custom opcode.");
+                case MatchOpCode.EndTurn:
+                    break;
+                case MatchOpCode.SelectCard:
+                    break;
+                case MatchOpCode.DeselectHeroCards:
+                    break;
+                case MatchOpCode.ChangeState:
                     break;
                 default:
-                    Console.WriteLine("User '{0}'' sent '{1}'", newState.UserPresence.Username, content);
+                    throw new ArgumentOutOfRangeException();
             }
         }
+    }
+
+
+    public enum MatchOpCode : long
+    {
+        EndTurn = 101L,
+        SelectCard = 102L,
+        DeselectHeroCards = 103L,
+        ChangeState = 104L
     }
 }
