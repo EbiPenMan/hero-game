@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Nakama;
 using ProGraphGroup.Packages.Utility;
 using Nakama.TinyJson;
 using Newtonsoft.Json;
@@ -12,42 +14,104 @@ using UnityEngine;
 
 namespace ProGraphGroup.Games.Hero
 {
-    public class ShopManager : MonoSingleton<ShopManager>
+    public class MultiPlayerManager : MonoSingletonExtend<MultiPlayerManager>
     {
-        private Log _logger;
-        private Dictionary<string, HeroFullModel> heroFullMap = new Dictionary<string, HeroFullModel>();
-
-        private void Awake()
+        private ISocket socket;
+        private List<IUserPresence> connectedOpponents;
+        private IMatchmakerTicket matchmakerTicket;
+        private IMatchmakerMatched matchmakerMatched;
+        private IMatch match;
+        
+        public async UniTask SendMMRequest()
         {
-            _logger = new Log("ShopManager");
+            await CreateSocket();
+
+            socket.ReceivedMatchmakerMatched += OnMatched;
+            socket.ReceivedMatchPresence += OnReceivedMatchPresence;
+
+            socket.ReceivedMatchState  += OnReceivedMatchState;
+
+            await SendMachMakingRequest();
+
+
         }
 
-        void Start()
+        public async UniTask CreateSocket()
         {
+            socket = ServerManager.Instance.client.NewSocket();
+            bool appearOnline = true;
+            int connectionTimeout = 30;
+            await socket.ConnectAsync(ServerManager.Instance.session, appearOnline, connectionTimeout);
         }
 
-        public async UniTask GetShop(int pageNumber)
+        public async UniTask SendMachMakingRequest()
         {
-            SelectQueryInputModel inputModel = new SelectQueryInputModel();
-            inputModel.Limit = 2;
-            inputModel.Offset = pageNumber;
-
-            GetShopResponse res = await ServerManager.Instance.GetShopItems(inputModel);
-            foreach (HeroFullModel heroFullModel in res.Result.List)
+            int minPlayers = 2;
+            int maxPlayers = 2;
+            string query = "+trophy:>100 mode:arena";
+            Dictionary<string, string> stringProperties = new Dictionary<string, string> {{"mode", "arena"}};
+            Dictionary<string, double> numericProperties = new Dictionary<string, double> {{"skill", 100}};
+            matchmakerTicket =
+                await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+        }
+        public async UniTask SendMachMakingCancelRequest()
+        {
+            await socket.RemoveMatchmakerAsync(matchmakerTicket);
+        }
+        public async UniTask SendJoinFoundedMatch()
+        {
+            match = await socket.JoinMatchAsync(matchmakerMatched);
+            foreach (var presence in match.Presences)
             {
-                heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
+                Logger.Info(String.Format("User id '{0}' name '{1}'.", presence.UserId, presence.Username));
+            }
+        }
+
+
+        public async void OnMatched(IMatchmakerMatched matchmakerMatched)
+        {
+            matchmakerMatched = matchmakerMatched;
+            Logger.Info("Received: {0}", matchmakerMatched.ToJson());
+            var opponents = string.Join(",\n  ", matchmakerMatched.Users); // printable list.
+            Logger.Info("Matched opponents: [{0}]", opponents);
+
+            await SendJoinFoundedMatch();
+
+        }
+
+        public async void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
+        {
+            connectedOpponents = new List<IUserPresence>(2);
+            foreach (var presence in matchPresenceEvent.Leaves)
+            {
+                connectedOpponents.Remove(presence);
             }
 
-            await GetMyHeroes();
+            connectedOpponents.AddRange(matchPresenceEvent.Joins);
+
+            // Remove yourself from connected opponents.
+            // connectedOpponents.Remove(this);
+            Console.WriteLine("Connected opponents: [{0}]", string.Join(",\n  ", connectedOpponents));
         }
 
-        public async UniTask GetMyHeroes()
+        public async UniTask SendMatchState(int opCode , IMatchState newState)
         {
-            // GetShopResponse res2 = await ServerManager.Instance.GetMyHero();
-            // foreach (HeroFullModel heroFullModel in res2.Result.List)
-            // {
-            //     heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
-            // }
+            socket.SendMatchStateAsync(match.Id, opCode, newState.ToJson());
+        }
+
+        public async void OnReceivedMatchState( IMatchState newState )
+        {
+            var enc = System.Text.Encoding.UTF8;
+            var content = enc.GetString(newState.State);
+
+            switch (newState.OpCode)
+            {
+                case 101:
+                    Console.WriteLine("A custom opcode.");
+                    break;
+                default:
+                    Console.WriteLine("User '{0}'' sent '{1}'", newState.UserPresence.Username, content);
+            }
         }
     }
 }
