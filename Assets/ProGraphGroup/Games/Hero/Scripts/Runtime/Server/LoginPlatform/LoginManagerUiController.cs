@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using ProGraphGroup.Games.Hero.Server.LoginPlatform.Base;
+using ProGraphGroup.Games.Hero.Transmission;
 using ProGraphGroup.General.Utility;
 using RTLTMPro;
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
 
         public async UniTask<LoginPlatformType> SelectLoginPlatform()
         {
+            Logger.Info("SelectLoginPlatform");
+            await TransmissionManager.Instance.Hide();
             btnDeviceLogin.SetActive(LoginManager.Instance.activeLoginPlatformType.HasFlag(LoginPlatformType.DeviceId));
             btnEmailLogin.SetActive(LoginManager.Instance.activeLoginPlatformType.HasFlag(LoginPlatformType.Email));
             btnCafeBazaarLogin.SetActive(
@@ -35,17 +38,20 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
 
         public void OnSelectedLoginPlatformType(int loginPlatformType)
         {
+            Logger.Info("OnSelectedLoginPlatformType");
             _selectedLoginPlatformType = (LoginPlatformType) loginPlatformType;
         }
 
         public void InitShowUi()
         {
+            Logger.Info("InitShowUi");
             rootNode.SetActive(true);
             loadingUi.SetActive(true);
             loginPlatformTypesNode.SetActive(false);
         }
         public void InitHideUi()
         {
+            Logger.Info("InitHideUi");
             rootNode.SetActive(false);
             loadingUi.SetActive(false);
             loginPlatformTypesNode.SetActive(false);

@@ -10,5 +10,6 @@ namespace ProGraphGroup.General.Utility
         {
             Logger = new Log(GetType().Name);
         }
+        
     }
 }

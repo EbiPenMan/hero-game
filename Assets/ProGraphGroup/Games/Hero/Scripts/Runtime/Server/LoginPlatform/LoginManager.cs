@@ -45,6 +45,7 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
             // {
             //     Debug.Log("Update() " + Time.frameCount);
             // }
+            Logger.Info("lastLoginPlatform: " + lastLoginPlatform);
 
             if (lastLoginPlatform != 0)
             {
@@ -72,6 +73,7 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
 
         public async UniTask<ISession> InitCurrentLoginPlatform(LoginPlatformType loginPlatformType)
         {
+            Logger.Info("InitCurrentLoginPlatform");
             if (loginPlatformType == LoginPlatformType.DeviceId)
             {
                 _currentLoginPlatform = Instantiate(deviceLoginPlatformPref, loginPlatformUiParentNode, true);

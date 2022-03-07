@@ -44,10 +44,10 @@ namespace ProGraphGroup.Games.Hero
         public async UniTask GetMyHeroes()
         {
             GetShopResponse res2 = await ServerManager.Instance.GetMyHero();
-            foreach (HeroFullModel heroFullModel in res2.Result.List)
-            {
-                heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
-            }
+            // foreach (HeroFullModel heroFullModel in res2.Result.List)
+            // {
+            //     heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
+            // }
         }
     }
 }

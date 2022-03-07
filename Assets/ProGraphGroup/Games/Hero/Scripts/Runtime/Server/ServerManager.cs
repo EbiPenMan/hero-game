@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace ProGraphGroup.Games.Hero.Server
 {
-    public class ServerManager : SingletonExtend<ServerManager>
+    public class ServerManager : MonoSingletonExtend<ServerManager>
     {
         public ServerClientConfigs serverClientConfigs;
         public ServerUiController uiController;
@@ -137,6 +137,7 @@ namespace ProGraphGroup.Games.Hero.Server
                 : null;
         }
 
+        
         private async UniTask<List<T>> getServerCollections<T>(string collection, string key, string userId = null,
             string version = null) where T : class
         {
