@@ -1,7 +1,13 @@
-﻿namespace ProGraphGroup.Games.Hero.Models.Configs
+﻿using System;
+using Newtonsoft.Json;
+
+namespace ProGraphGroup.Games.Hero.Models.Configs
 {
-    public class UserStoragePrivateConfigsModel
-    {
-        
+    public class UserStoragePrivateConfigsModel {
+    
+        [JsonProperty("startFillEnergy")]
+        public DateTime StartFillEnergy;
+    
     }
+
 }

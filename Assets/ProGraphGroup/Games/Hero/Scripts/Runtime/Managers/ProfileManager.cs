@@ -62,14 +62,14 @@ namespace ProGraphGroup.Games.Hero.Managers
             return res.Result.Status;
         }
 
-        public UserWallet GetMyWallet()
-        {
-            return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
-        }
-        public async UniTask<UserWallet> GetMyWalletAsync()
-        {
-            await GetMyAccountAsync();
-            return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
-        }
+        // public UserWallet GetMyWallet()
+        // {
+        //     return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
+        // }
+        // public async UniTask<UserWallet> GetMyWalletAsync()
+        // {
+        //     await GetMyAccountAsync();
+        //     return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
+        // }
     }
 }

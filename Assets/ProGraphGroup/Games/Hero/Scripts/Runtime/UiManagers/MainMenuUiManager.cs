@@ -36,7 +36,7 @@ namespace ProGraphGroup.Games.Hero.UiManagers
         private void updateMyAccountUi()
         {
             txt_playerName.text = ProfileManager.Instance.GetMyAccount().User.DisplayName;
-            txt_wallet_current_energy.text = ProfileManager.Instance.GetMyWallet().Energy.ToString();
+            // txt_wallet_current_energy.text = ProfileManager.Instance.GetMyWallet().Energy.ToString();
         }
         private void updateEnergyMaxUi()
         {

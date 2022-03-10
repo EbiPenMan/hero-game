@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using ProGraphGroup.Packages.Utility;
 using Nakama;
 using Newtonsoft.Json;
+using ProGraphGroup.Games.Hero.Models.Configs;
 using ProGraphGroup.Games.Hero.Server.Configs;
 using ProGraphGroup.Games.Hero.Server.LoginPlatform;
 using ProGraphGroup.Games.Hero.Server.LoginPlatform.Base;
@@ -28,10 +29,10 @@ namespace ProGraphGroup.Games.Hero.Server
         [HideInInspector] public string uniqueIdentifier;
         [HideInInspector] public ISession session;
 
-        [HideInInspector] public ServerConfigsModel serverConfigs;
-        [HideInInspector] public List<HeroClassConfigsModel> heroClassConfigs;
-        [HideInInspector] public List<PartClassAdditionalStatsConfigsModel> partClassAdditionalStatsConfigs;
-
+        [HideInInspector] public PublicServerConfigsModel publicServerConfigs;
+        [HideInInspector] public BuffDebuffListConfigs buffDebuffListConfigs;
+        [HideInInspector] public HeroClassListConfigs heroClassListConfigs;
+        [HideInInspector] public PartClassAdditionalStatsListConfigs partClassAdditionalStatsListConfigs;
 
         public async UniTask<bool> Init()
         {
@@ -59,17 +60,11 @@ namespace ProGraphGroup.Games.Hero.Server
 
         private async UniTask<bool> getAndSetInitData()
         {
-            serverConfigs = await getServerCollection<ServerConfigsModel>("public_configuration", "server_configs");
-
-            HeroClassConfigsResponse heroClassConfigsResponse =
-                await getServerCollection<HeroClassConfigsResponse>("public_configuration", "hero_class_configs");
-            heroClassConfigs = heroClassConfigsResponse.List;
-
-            PartClassAdditionalStatsConfigsResponse partClassAdditionalStatsConfigsResponse =
-                await getServerCollection<PartClassAdditionalStatsConfigsResponse>("public_configuration",
-                    "part_class_additional_stats_configs");
-            partClassAdditionalStatsConfigs = partClassAdditionalStatsConfigsResponse.List;
-
+            publicServerConfigs = await getServerCollection<PublicServerConfigsModel>("public_configuration", "server_configs");
+            buffDebuffListConfigs = await getServerCollection<BuffDebuffListConfigs>("public_configuration", "buff_debuff_configs");
+            heroClassListConfigs = await getServerCollection<HeroClassListConfigs>("public_configuration", "hero_class_configs");
+            partClassAdditionalStatsListConfigs = await getServerCollection<PartClassAdditionalStatsListConfigs>("public_configuration", "part_class_additional_stats_configs");
+        
             return true;
         }
 
@@ -98,13 +93,13 @@ namespace ProGraphGroup.Games.Hero.Server
             return JsonConvert.DeserializeObject<BaseResponseVerifyModel>(response.Payload);
         }
 
-        public async UniTask<GetShopResponse> GetShopItems(SelectQueryInputModel selectQueryInputModel)
-        {
-            var response =
-                await client.RpcAsync(session, "rpcGetShop", JsonConvert.SerializeObject(selectQueryInputModel));
-            return JsonConvert.DeserializeObject<GetShopResponse>(response.Payload);
-        }
-
+        // public async UniTask<GetShopResponse> GetShopItems(SelectQueryInputModel selectQueryInputModel)
+        // {
+        //     var response =
+        //         await client.RpcAsync(session, "rpcGetShop", JsonConvert.SerializeObject(selectQueryInputModel));
+        //     return JsonConvert.DeserializeObject<GetShopResponse>(response.Payload);
+        // }
+        //
         public async UniTask<GetShopResponse> GetMyHero()
         {
             var response =

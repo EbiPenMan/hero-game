@@ -15,7 +15,7 @@ namespace ProGraphGroup.Games.Hero
     public class ShopManager : MonoSingleton<ShopManager>
     {
         private Log _logger;
-        private Dictionary<string, HeroFullModel> heroFullMap = new Dictionary<string, HeroFullModel>();
+        // private Dictionary<string, HeroFullModel> heroFullMap = new Dictionary<string, HeroFullModel>();
 
         private void Awake()
         {
@@ -28,17 +28,17 @@ namespace ProGraphGroup.Games.Hero
 
         public async UniTask GetShop(int pageNumber)
         {
-            SelectQueryInputModel inputModel = new SelectQueryInputModel();
-            inputModel.Limit = 2;
-            inputModel.Offset = pageNumber;
-
-            GetShopResponse res = await ServerManager.Instance.GetShopItems(inputModel);
-            foreach (HeroFullModel heroFullModel in res.Result.List)
-            {
-                heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
-            }
-
-            await GetMyHeroes();
+            // SelectQueryInputModel inputModel = new SelectQueryInputModel();
+            // inputModel.Limit = 2;
+            // inputModel.Offset = pageNumber;
+            //
+            // GetShopResponse res = await ServerManager.Instance.GetShopItems(inputModel);
+            // foreach (HeroFullModel heroFullModel in res.Result.List)
+            // {
+            //     heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
+            // }
+            //
+            // await GetMyHeroes();
         }
 
         public async UniTask GetMyHeroes()
