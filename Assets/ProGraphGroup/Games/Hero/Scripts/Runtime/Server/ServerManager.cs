@@ -100,11 +100,11 @@ namespace ProGraphGroup.Games.Hero.Server
         //     return JsonConvert.DeserializeObject<GetShopResponse>(response.Payload);
         // }
         //
-        public async UniTask<GetShopResponse> GetMyHero()
+        public async UniTask<ResponseGetHeroes> GetMyHero()
         {
             var response =
                 await client.RpcAsync(session, "rpcGetMyHeroes", "");
-            return JsonConvert.DeserializeObject<GetShopResponse>(response.Payload);
+            return JsonConvert.DeserializeObject<ResponseGetHeroes>(response.Payload);
         }
 
 

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using ProGraphGroup.Packages.Utility;
 using Nakama.TinyJson;
 using Newtonsoft.Json;
+using ProGraphGroup.Games.Hero.Models;
 using ProGraphGroup.Games.Hero.Server;
 using ProGraphGroup.Games.Hero.Server.Models;
 using ProGraphGroup.Games.Hero.Server.Models.Response;
@@ -15,7 +16,7 @@ namespace ProGraphGroup.Games.Hero
     public class ShopManager : MonoSingleton<ShopManager>
     {
         private Log _logger;
-        // private Dictionary<string, HeroFullModel> heroFullMap = new Dictionary<string, HeroFullModel>();
+        private Dictionary<string, HeroModel> heroMap = new Dictionary<string, HeroModel>();
 
         private void Awake()
         {
@@ -38,16 +39,16 @@ namespace ProGraphGroup.Games.Hero
             //     heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
             // }
             //
-            // await GetMyHeroes();
+            await GetMyHeroes();
         }
 
         public async UniTask GetMyHeroes()
         {
-            // GetShopResponse res2 = await ServerManager.Instance.GetMyHero();
-            // foreach (HeroFullModel heroFullModel in res2.Result.List)
-            // {
-            //     heroFullMap.Add(heroFullModel.Hero.Id, heroFullModel);
-            // }
+            ResponseGetHeroes res2 = await ServerManager.Instance.GetMyHero();
+            foreach (HeroModel heroModel in res2.Result.List)
+            {
+                heroMap.Add(heroModel.Id, heroModel);
+            }
         }
     }
 }

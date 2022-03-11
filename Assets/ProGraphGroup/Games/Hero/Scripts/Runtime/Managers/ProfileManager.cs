@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using ProGraphGroup.Packages.Utility;
 using Nakama;
 using Newtonsoft.Json;
+using ProGraphGroup.Games.Hero.Models.Configs;
 using ProGraphGroup.Games.Hero.Server;
 using ProGraphGroup.Games.Hero.Server.Models;
 using ProGraphGroup.Games.Hero.Server.Models.Response;
@@ -62,14 +63,14 @@ namespace ProGraphGroup.Games.Hero.Managers
             return res.Result.Status;
         }
 
-        // public UserWallet GetMyWallet()
-        // {
-        //     return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
-        // }
-        // public async UniTask<UserWallet> GetMyWalletAsync()
-        // {
-        //     await GetMyAccountAsync();
-        //     return JsonConvert.DeserializeObject<UserWallet>(_myAccount.Wallet);
-        // }
+        public UserWalletModel GetMyWallet()
+        {
+            return JsonConvert.DeserializeObject<UserWalletModel>(_myAccount.Wallet);
+        }
+        public async UniTask<UserWalletModel> GetMyWalletAsync()
+        {
+            await GetMyAccountAsync();
+            return JsonConvert.DeserializeObject<UserWalletModel>(_myAccount.Wallet);
+        }
     }
 }

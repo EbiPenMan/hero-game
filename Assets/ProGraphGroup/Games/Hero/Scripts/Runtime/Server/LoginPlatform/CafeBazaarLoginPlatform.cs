@@ -3,8 +3,8 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ProGraphGroup.Games.Hero.Server.LoginPlatform.Base;
 using UnityEngine;
-using CafeBazaar.Games;
-using CafeBazaar.Games.BasicApi;
+// using CafeBazaar.Games;
+// using CafeBazaar.Games.BasicApi;
 using Nakama;
 using ProGraphGroup.General.Models;
 using ProGraphGroup.General.Utility;
@@ -106,28 +106,28 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
         {
             try
             {
-                var config = new BazaarGamesClientConfiguration.Builder().Build();
-                BazaarGamesPlatform.InitializeInstance(config);
-                BazaarGamesPlatform.Activate();
-
-                bool response = false;
-                bool isEndAuthenticate = false;
-                BazaarGamesPlatform.Instance.Authenticate(false, res =>
-                {
-                    if (res)
-                        Debug.Log("SignedIn to bazaar AccountId : " +
-                                  BazaarGamesPlatform.Instance.GetUserId());
-                    else
-                        Debug.Log("SignedIn error ");
-                    response = res;
-                    isEndAuthenticate = true;
-                });
-                await UniTask.WaitUntil(() => isEndAuthenticate == false);
-
-                if (response)
-                {
-                    return BazaarGamesPlatform.Instance.GetUserId();
-                }
+                // var config = new BazaarGamesClientConfiguration.Builder().Build();
+                // BazaarGamesPlatform.InitializeInstance(config);
+                // BazaarGamesPlatform.Activate();
+                //
+                // bool response = false;
+                // bool isEndAuthenticate = false;
+                // BazaarGamesPlatform.Instance.Authenticate(false, res =>
+                // {
+                //     if (res)
+                //         Debug.Log("SignedIn to bazaar AccountId : " +
+                //                   BazaarGamesPlatform.Instance.GetUserId());
+                //     else
+                //         Debug.Log("SignedIn error ");
+                //     response = res;
+                //     isEndAuthenticate = true;
+                // });
+                // await UniTask.WaitUntil(() => isEndAuthenticate == false);
+                //
+                // if (response)
+                // {
+                //     return BazaarGamesPlatform.Instance.GetUserId();
+                // }
 
                 throw new ErrorModel(0, "null response");
             }

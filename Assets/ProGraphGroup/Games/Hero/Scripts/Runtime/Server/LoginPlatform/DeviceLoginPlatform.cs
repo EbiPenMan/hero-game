@@ -33,6 +33,7 @@ namespace ProGraphGroup.Games.Hero.Server.LoginPlatform
                 PlayerPrefs.SetString("DeviceLoginPlatform_uniqueIdentifier", _uniqueIdentifier);
                 PlayerPrefs.Save();
                 _logger.Info("SingIn Device Successful.", "uniqueIdentifier : " + _uniqueIdentifier, new[] {"SingIn"});
+                _logger.Info("SingIn Device Successful.", "UserId : " + session.UserId, new[] {"SingIn"});
                 return new Tuple<ISession, ErrorModel>(session, null);
             }
             catch (Exception e)

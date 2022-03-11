@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using Nakama;
 using ProGraphGroup.Packages.Utility;
@@ -9,8 +10,10 @@ using Newtonsoft.Json;
 using ProGraphGroup.Games.Hero.Server;
 using ProGraphGroup.Games.Hero.Server.Models;
 using ProGraphGroup.Games.Hero.Server.Models.Response;
+using ProGraphGroup.Games.Hero.UiManagers;
 using ProGraphGroup.General.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProGraphGroup.Games.Hero
 {
@@ -22,39 +25,53 @@ namespace ProGraphGroup.Games.Hero
         private IMatchmakerMatched matchmakerMatched;
         private IMatch match;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            MainMenuUiManager.Instance.btn_arenaMatch.onClick.AddListener(() => { InitNewMatchMaking(); });
+        }
+
         public async UniTask InitNewMatchMaking()
         {
-            await CreateSocket();
+            CreateSocket();
+            await ConnectSocket();
+            await SendMatchMakingRequest();
+        }
+
+        public void CreateSocket()
+        {
+            socket = ServerManager.Instance.client.NewSocket();
 
             socket.ReceivedMatchmakerMatched -= OnMatched;
             socket.ReceivedMatchmakerMatched += OnMatched;
             socket.ReceivedMatchPresence -= OnReceivedMatchPresence;
             socket.ReceivedMatchPresence += OnReceivedMatchPresence;
-
             socket.ReceivedMatchState -= OnReceivedMatchState;
             socket.ReceivedMatchState += OnReceivedMatchState;
 
-            await SendMachMakingRequest();
+            socket.Connected += () => { Logger.Info("socket.Connected"); };
+            socket.Closed += () => { Logger.Info("socket.Closed"); };
         }
 
-        public async UniTask CreateSocket()
+        public async UniTask ConnectSocket()
         {
-            socket = ServerManager.Instance.client.NewSocket();
-            bool appearOnline = true;
-            int connectionTimeout = 30;
+            Logger.Info("ConnectSocket");
             try
             {
-                await socket.ConnectAsync(ServerManager.Instance.session, appearOnline, connectionTimeout);
+                await socket.ConnectAsync(ServerManager.Instance.session, true, 30);
+                Logger.Info("ConnectSocket after");
             }
             catch (Nakama.ApiResponseException ex)
             {
-                Logger.Info(String.Format("Error CreateSocket: {0}:{1}", ex.StatusCode, ex.Message));
+                Logger.Info(String.Format("Error ConnectSocket: {0}:{1}", ex.StatusCode, ex.Message));
             }
         }
 
-        public async UniTask SendMachMakingRequest()
+
+        public async UniTask SendMatchMakingRequest()
         {
-            int minPlayers = 2;
+            Logger.Info("SendMatchMakingRequest");
+            int minPlayers = 1;
             int maxPlayers = 2;
             long trophy = 100;
             string query = String.Format("+trophy:>={0} +trophy:<={1} mode:arena", trophy - 20, trophy + 20);
@@ -63,7 +80,9 @@ namespace ProGraphGroup.Games.Hero
             try
             {
                 matchmakerTicket =
-                    await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+                    // await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+                    await socket.AddMatchmakerAsync();
+                Logger.Info("SendMatchMakingRequest after send matchmakerTicket: ", matchmakerTicket.Ticket);
             }
             catch (Nakama.ApiResponseException ex)
             {
@@ -73,6 +92,7 @@ namespace ProGraphGroup.Games.Hero
 
         public async UniTask SendMachMakingCancelRequest()
         {
+            Logger.Info("SendMachMakingCancelRequest");
             try
             {
                 await socket.RemoveMatchmakerAsync(matchmakerTicket);
@@ -85,6 +105,7 @@ namespace ProGraphGroup.Games.Hero
 
         public async UniTask SendJoinFoundedMatch()
         {
+            Logger.Info("SendJoinFoundedMatch");
             try
             {
                 match = await socket.JoinMatchAsync(matchmakerMatched);
@@ -103,16 +124,18 @@ namespace ProGraphGroup.Games.Hero
 
         public async void OnMatched(IMatchmakerMatched matchmakerMatched)
         {
+            Logger.Info("OnMatched");
             matchmakerMatched = matchmakerMatched;
-            Logger.Info("Received: {0}", matchmakerMatched.ToJson());
+            Logger.Info("OnMatched Received: {0}", matchmakerMatched.ToJson());
             var opponents = string.Join(",\n  ", matchmakerMatched.Users); // printable list.
-            Logger.Info("Matched opponents: [{0}]", opponents);
+            Logger.Info("OnMatched opponents: [{0}]", opponents);
 
             await SendJoinFoundedMatch();
         }
 
         public async void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
         {
+            Logger.Info("OnReceivedMatchPresence");
             connectedOpponents = new List<IUserPresence>(2);
             foreach (var presence in matchPresenceEvent.Leaves)
             {
@@ -128,6 +151,7 @@ namespace ProGraphGroup.Games.Hero
 
         public async UniTask SendMatchState(MatchOpCode opCode, IMatchState newState)
         {
+            Logger.Info("SendMatchState");
             try
             {
                 await socket.SendMatchStateAsync(match.Id, (long) opCode, newState.ToJson());
@@ -140,8 +164,10 @@ namespace ProGraphGroup.Games.Hero
 
         public async void OnReceivedMatchState(IMatchState newState)
         {
-            var enc = System.Text.Encoding.UTF8;
-            var content = enc.GetString(newState.State);
+            Logger.Info("OnReceivedMatchState");
+            Encoding enc = System.Text.Encoding.UTF8;
+            String content = enc.GetString(newState.State);
+            Logger.Info("OnReceivedMatchState newState: ", content);
 
             switch ((MatchOpCode) newState.OpCode)
             {

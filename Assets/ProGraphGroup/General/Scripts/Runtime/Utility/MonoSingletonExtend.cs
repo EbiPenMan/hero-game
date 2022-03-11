@@ -8,7 +8,7 @@ namespace ProGraphGroup.General.Utility
     {
         protected Log Logger;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             Logger = new Log(GetType().Name);
             base.Awake();

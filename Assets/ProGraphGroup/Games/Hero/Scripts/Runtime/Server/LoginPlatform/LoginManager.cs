@@ -1,11 +1,9 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq;
 using Nakama;
 using ProGraphGroup.Games.Hero.Server.LoginPlatform.Base;
 using ProGraphGroup.General.Models;
 using ProGraphGroup.General.Utility;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace ProGraphGroup.Games.Hero.Server.LoginPlatform

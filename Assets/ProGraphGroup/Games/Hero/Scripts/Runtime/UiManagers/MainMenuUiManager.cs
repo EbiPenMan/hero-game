@@ -18,6 +18,9 @@ namespace ProGraphGroup.Games.Hero.UiManagers
         public RTLTextMeshPro txt_wallet_current_energy;
         public RTLTextMeshPro txt_wallet_max_energy;
 
+        public Button btn_arenaMatch;
+            
+
         private async Task Awake()
         {
             ProfileManager.Instance.onSynceMyAccount.AddListener(updateMyAccountUi);
