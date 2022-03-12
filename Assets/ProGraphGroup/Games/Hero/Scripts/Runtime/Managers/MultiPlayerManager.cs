@@ -71,7 +71,7 @@ namespace ProGraphGroup.Games.Hero
         public async UniTask SendMatchMakingRequest()
         {
             Logger.Info("SendMatchMakingRequest");
-            int minPlayers = 1;
+            int minPlayers = 2;
             int maxPlayers = 2;
             long trophy = 100;
             string query = String.Format("+trophy:>={0} +trophy:<={1} mode:arena", trophy - 20, trophy + 20);
@@ -80,8 +80,8 @@ namespace ProGraphGroup.Games.Hero
             try
             {
                 matchmakerTicket =
-                    // await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
-                    await socket.AddMatchmakerAsync();
+                    await socket.AddMatchmakerAsync(query, minPlayers, maxPlayers, stringProperties, numericProperties);
+                    // await socket.AddMatchmakerAsync();
                 Logger.Info("SendMatchMakingRequest after send matchmakerTicket: ", matchmakerTicket.Ticket);
             }
             catch (Nakama.ApiResponseException ex)
